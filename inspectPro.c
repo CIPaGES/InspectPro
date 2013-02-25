@@ -10,6 +10,7 @@
 #include "interface.h"
 #include "profileTree.h"
 #include "eprintf.h"
+#include "inspectPro.h"
 
 void writeProfiles(Profile *pro, int n){
   int i;
@@ -46,6 +47,29 @@ void writePositions(FILE *fp){
   free(pos);
 }
 
+void writeLikelihoods(FILE *fp){
+  int i;
+  Result *r;
+  double n, numRead, *lOne, *lTwo;
+
+  r = (Result *)emalloc(sizeof(Result));
+  printf("#id\tl_1\tl_2\n");
+  numRead = fread(r,sizeof(Result),1,fp);
+  assert(numRead == 1);
+  numRead = fread(&n,sizeof(double),1,fp);
+  lOne = (double *)emalloc(n*sizeof(double));
+  lTwo = (double *)emalloc(n*sizeof(double));
+  numRead = fread(lOne,sizeof(double),n,fp);
+  assert(numRead == n);
+  numRead = fread(lTwo,sizeof(double),n,fp);
+  assert(numRead == n);
+  for(i=0;i<n;i++)
+    printf("%d\t%.3e\t%.3e\n",i,lOne[i],lTwo[i]);
+  free(r);
+  free(lOne);
+  free(lTwo);
+}
+
 void scanFile(FILE *fp, Args *args){
   char *tag;
   int numRead, *lengths;
@@ -74,6 +98,8 @@ void scanFile(FILE *fp, Args *args){
       free(lengths);
     }else if(strcmp(tag,"pos")==0){
       writePositions(fp);
+    }else if(strcmp(tag,"lik")==0){
+      writeLikelihoods(fp);
     }else
       assert(0);
     numRead = fread(tag,sizeof(char),3,fp);
@@ -87,7 +113,7 @@ int main(int argc, char *argv[]){
   Args *args;
   FILE *fp;
 
-  version = "0.2";
+  version = "0.3";
   setprogname2("inspectPro");
   args = getArgs(argc, argv);
   if(args->v)
