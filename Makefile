@@ -7,7 +7,7 @@ OBJFILES= inspectPro.o interface.o eprintf.o
 LIBS= -lm
 EXECFILE=inspectPro
 DIRECTORY=InspectPro
-VERSION=0.1
+VERSION=0.2
 # The make rule for the executable
 .PHONY : all
 all : $(EXECFILE)

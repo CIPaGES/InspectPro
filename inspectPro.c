@@ -43,7 +43,6 @@ void writePositions(FILE *fp){
     printf("%d\t%d\n",pos->pos,pos->pro);
     numRead = fread(pos,sizeof(Position),1,fp);
   }
-  printf("%d\t%d\n",pos->pos,pos->pro);
   free(pos);
 }
 
@@ -88,7 +87,7 @@ int main(int argc, char *argv[]){
   Args *args;
   FILE *fp;
 
-  version = "0.1";
+  version = "0.2";
   setprogname2("inspectPro");
   args = getArgs(argc, argv);
   if(args->v)
